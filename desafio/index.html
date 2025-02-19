@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação de Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Validação de Usuário</h2>
+    
+    <form id="usuarioForm">
+        <input type="text" id="cpf" placeholder="CPF" required>
+        <input type="text" id="nomeCompleto" placeholder="Nome Completo" required>
+        <input type="text" id="telefone" placeholder="Telefone" required>
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="date" id="dataNascimento" required>
+        <input type="text" id="endereco" placeholder="Endereço" required>
+        <input type="text" id="nomeMae" placeholder="Nome da Mãe" required>
+        <button type="submit">Validar</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        document.getElementById("usuarioForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const dados = {
+                cpf: document.getElementById("cpf").value,
+                nomeCompleto: document.getElementById("nomeCompleto").value,
+                telefone: document.getElementById("telefone").value,
+                email: document.getElementById("email").value,
+                dataNascimento: document.getElementById("dataNascimento").value,
+                endereco: document.getElementById("endereco").value,
+                nomeMae: document.getElementById("nomeMae").value
+            };
+
+            try {
+                const response = await fetch("http://localhost:8080/usuarios/validar", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dados)
+                });
+
+                const resultado = await response.text();
+                document.getElementById("resultado").innerText = resultado;
+            } catch (error) {
+                document.getElementById("resultado").innerText = "Erro ao validar os dados.";
+            }
+        });
+    </script>
+
+</body>
+</html>
